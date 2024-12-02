@@ -1,14 +1,19 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { Route, Routes, Link } from "react-router-dom"; // Import routing components, no need for BrowserRouter here
 import CharacterList from "./CharacterList"; // Import CharacterList component
 import CharacterDetail from "./CharacterDetail"; // Import CharacterDetail component
 import './index.css'; // Ensure your styles are applied
+import NotFound from './NotFound'; // Import the NotFound component
+
+// Inside your Routes setup
+<Route path="*" component={NotFound} />
+
 
 const App = () => {
   const [marvelData, setMarvelData] = useState(null);
-  const [selectedCharacterId, setSelectedCharacterId] = useState(null); // State to store the selected character's ID
 
-  // Function to fetch data from the backend
+  // Fetch Marvel data for the home page (list of characters)
   const fetchMarvelData = async () => {
     try {
       const response = await axios.get("http://localhost:3000/fetch-marvel-data");
@@ -18,38 +23,33 @@ const App = () => {
     }
   };
 
-  // Fetch the data on component mount
   useEffect(() => {
     fetchMarvelData();
   }, []);
 
-  const handleSelectCharacter = (characterId) => {
-    setSelectedCharacterId(characterId); // Set the selected character's ID
-  };
-
   return (
     <div>
-      <h1>Marvel Characters</h1>
-      <div style={{ display: "flex", gap: "20px" }}>
-        <div style={{ width: "50%" }}>
-          {marvelData ? (
-            <CharacterList
-              characters={marvelData.data.results}
-              onSelect={handleSelectCharacter} // Pass the select handler to CharacterList
-            />
-          ) : (
-            <p>Loading Marvel characters...</p>
-          )}
-        </div>
-        <div style={{ width: "50%" }}>
-          {/* Only show CharacterDetail if a character is selected */}
-          {selectedCharacterId ? (
-            <CharacterDetail characterId={selectedCharacterId} />
-          ) : (
-            <p>Select a character to view details</p>
-          )}
-        </div>
-      </div>
+      <nav>
+        <ul>
+          <li><Link to="/">Home</Link></li>
+          <li><Link to="/browse-characters">Browse Characters</Link></li>
+          <li><Link to="/comics">Comics</Link></li>
+        </ul>
+      </nav>
+
+      <Routes>
+        <Route path="/" element={<h1>Welcome to the Marvel Comic Book Library!</h1>} />
+        <Route
+            path="/browse-characters"
+            element={<CharacterList characters={marvelData?.data?.results} />}
+        />
+        <Route
+            path="/character-details/:id"
+            element={<CharacterDetail />}
+        />
+        <Route path="/comics" element={<h1>Comics - Coming soon!</h1>} />
+        <Route path="*" element={<NotFound />} />
+    </Routes>
     </div>
   );
 };

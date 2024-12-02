@@ -1,28 +1,29 @@
+// src/components/CharacterDetail.jsx
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useParams } from "react-router-dom"; // Import useParams hook
 import './index.css';
 
-const CharacterDetail = ({ characterId }) => {
+const CharacterDetail = () => {
+    const { id } = useParams();  // Retrieve the character ID from the URL
     const [character, setCharacter] = useState(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        if (!characterId) return;
-
         const fetchCharacter = async () => {
             try {
-                const response = await axios.get(`http://localhost:3000/fetch-marvel-data/${characterId}`); // Adjust the backend endpoint as needed
+                const response = await axios.get(`http://localhost:3000/fetch-marvel-data/${id}`);
                 setCharacter(response.data.data.results[0]);
                 setLoading(false);
             } catch (error) {
                 console.error("Error fetching character details:", error);
             }
         };
-        fetchCharacter();
-    }, [characterId]);
+        if (id) fetchCharacter();
+    }, [id]);
 
-    if (!characterId) return <p>Select a character to view details.</p>;
     if (loading) return <p>Loading character details...</p>;
+    if (!character) return <p>Character not found.</p>;
 
     return (
         <div className="character-detail">
