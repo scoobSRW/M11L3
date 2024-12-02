@@ -1,0 +1,43 @@
+.character-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Make columns flexible with a minimum width */
+    gap: 16px;
+    padding: 16px;
+}
+
+.character-item {
+    text-align: center;
+    cursor: pointer;
+    border: 1px solid #ccc; /* Light border around each item */
+    border-radius: 8px;
+    padding: 16px;
+    background-color: #f9f9f9; /* Light background color for each item */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth hover transition */
+}
+
+.character-item:hover {
+    transform: scale(1.05); /* Slight zoom effect on hover */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Box-shadow on hover */
+}
+
+.character-item img {
+    width: 100%; /* Makes the image take up the full width of the container */
+    max-width: 150px; /* Restricts the image width to 150px */
+    height: auto; /* Maintains the aspect ratio of the image */
+    border-radius: 8px;
+    object-fit: cover; /* Ensures the image fills the container without stretching */
+    margin-bottom: 12px; /* Adds space between the image and the text */
+}
+
+.character-item p {
+    font-weight: bold; /* Makes the character name bold */
+    color: #333; /* Dark color for the name */
+    margin-top: 8px; /* Adds space above the name */
+}
+
+.character-item .description {
+    font-size: 14px; /* Smaller font size for descriptions */
+    color: #666; /* Lighter color for description text */
+    margin-top: 4px; /* Adds space above the description */
+}
+
